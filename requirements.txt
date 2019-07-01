@@ -4,4 +4,3 @@ markdown==3.1
 google-cloud-speech==1.0.0
 google-cloud-storage==1.15.0
 sendgrid==6.0.5
-celery==4.3.0

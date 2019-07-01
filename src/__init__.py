@@ -5,10 +5,8 @@ from flask import Flask, jsonify, request
 from werkzeug import secure_filename
 from . import transcribe_audio
 from . import constants
-from . import tasks
 
 app = Flask(__name__)
-celery = tasks.make_celery(app)
 
 
 def allowed_file(filename):
@@ -28,11 +26,6 @@ def index():
         content = markdown_file.read()
         # convert to HTML
     return markdown.markdown(content)
-
-
-@celery.task
-def test():
-    return 'chibaby'
 
 
 @app.route("/transcribe-audio", methods=('GET', 'POST'))
