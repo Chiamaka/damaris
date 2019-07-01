@@ -1,0 +1,8 @@
+instance
+.env
+audios
+transcriptions
+log_file.log
+.vscode
+src/__pycache__
+.DS_Store

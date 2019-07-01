@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: 'rabbitmq'
+    restart: always
+    ports:
+      - '5672:5672'
+
+  damaris-registry:
+    build: .
+    volumes:
+      - .:/usr/src/damaris
+    env_file:
+      - .env
+    ports:
+      - 5000:80
+    links:
+      - rabbitmq
