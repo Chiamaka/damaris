@@ -44,7 +44,6 @@ class Transcribe:
 
     def get_duration(self):
         """Return the duration of the wav file"""
-        import wave
         with wave.open(self.wav_file, 'r') as frame:
             frames = frame.getnframes()
             rate = frame.getframerate()
