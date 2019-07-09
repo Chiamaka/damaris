@@ -68,5 +68,4 @@ def transcribe():
             return jsonify({'file_uploaded': 'success'})
 
     if request.method == 'GET':
-        test.delay()
         return jsonify({'status_code': 200, 'message': 'ok'})

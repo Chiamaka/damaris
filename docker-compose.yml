@@ -10,7 +10,7 @@ services:
   damaris-registry:
     build: .
     volumes:
-      - .:/usr/src/damaris
+      - .:/usr/src/app
     env_file:
       - .env
     ports:
