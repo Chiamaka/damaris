@@ -38,26 +38,22 @@ def transcribe():
         try:
             file = request.files['audio_file']
         except KeyError:
-            file = None
-        try:
-            email = request.form['email_address']
-        except KeyError:
-            email = None
-
-        if file is None:
             err = jsonify(
                 {'status_code': 400, 'message': 'Missing audio file'})
             return err, 400
-        elif not allowed_file(file.filename):
+        try:
+            email = request.form['email_address']
+        except KeyError:
+            err = jsonify({'status_code': 400, 'message': 'Missing email'})
+            return err, 400
+
+        if not allowed_file(file.filename):
             err = jsonify({'status_code': 400, 'message': 'Bad audio file type. \
                 Expects {}'.format(
                 constants.ALLOWED_EXTENSIONS)})
             return err, 400
-        elif email is None:
-            err = jsonify({'status_code': 400, 'message': 'Missing email'})
-            return err, 400
-        elif validate_email(email) is None:
-            err = jsonify({'status_code': 400, 'message': 'Bad email'})
+        if validate_email(email) is None:
+            err = jsonify({'status_code': 400, 'message': 'Bad email format'})
             return err, 400
         else:
             filename = secure_filename(file.filename)
@@ -65,7 +61,7 @@ def transcribe():
             file.save(os.path.join(
                 constants.UPLOAD_FOLDER, email + '-' + filename))
             transcribe_audio.main(filename, email)
-            return jsonify({'file_uploaded': 'success'})
+            return jsonify({'file_uploaded': 'success'}), 200
 
     if request.method == 'GET':
         return jsonify({'status_code': 200, 'message': 'ok'})

@@ -36,11 +36,11 @@ class Transcribe:
 
         if duration <= 60:
             log.info('Local transcription....')
-            self.transcribe_file()
+            self.transcribe_local_file()
         else:
             log.info('Remote upload then transcription....')
             gcs_uri = self.upload_audio_file_to_google_storage()
-            self.transcribe_gcs(gcs_uri)
+            self.transcribe_remote_file(gcs_uri)
 
     def get_duration(self):
         """Return the duration of the wav file"""
@@ -69,7 +69,7 @@ class Transcribe:
         log.info('File {} uploaded to {}'.format(self.wav_file, url))
         return url
 
-    def transcribe_file(self):
+    def transcribe_local_file(self):
         """Transcribe the local audio file"""
         client = speech.SpeechClient()
         with wave.open(self.wav_file, 'rb') as audio_file:
@@ -97,9 +97,9 @@ class Transcribe:
 
         send_email(self.email, self.transcription_filename)
 
-    def transcribe_gcs(self, gcs_uri):
+    def transcribe_remote_file(self, gcs_uri):
         """
-        Asynchronously transcribes the audio file specified by the gcs_uri.
+        Transcribes the audio file specified by the gcs_uri (greater than 1 min & up to 480 mins)
         """
         client = speech.SpeechClient()
         audio = types.RecognitionAudio(uri=gcs_uri)
